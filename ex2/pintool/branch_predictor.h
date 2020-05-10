@@ -357,7 +357,7 @@ public:
 
     virtual string getName() {
         std::ostringstream stream;
-        stream << "Tournament(" << PREDICTOR[0]->getName() << "," << PREDICTOR[1]->getName() << ")";
+        stream << "Tournament-" << entries/KILO << "K-Entries-(" << PREDICTOR[0]->getName() << "," << PREDICTOR[1]->getName() << ")";
         return stream.str();
     }
 
@@ -453,8 +453,8 @@ class AlphaPredictor : public BranchPredictor
 public:
     AlphaPredictor() : BranchPredictor() {
 		choice_entries = 4*KILO; // How many entries for choice predictor
-        BranchPredictor* p0 = new LocalHistoryPredictor(KILO, 10, 1, 3);
-        BranchPredictor* p1 = new GlobalHistoryPredictor(12, 1, 2); // 4K 2bit proedctors
+        BranchPredictor* p0 = new LocalHistoryPredictor(KILO, 10, 0, 3);
+        BranchPredictor* p1 = new GlobalHistoryPredictor(12, 0, 2); // 4K 2bit proedctors
         PREDICTOR[0] = p0;
         PREDICTOR[1] = p1;
 

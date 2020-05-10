@@ -284,7 +284,7 @@ VOID InitPredictors()
 
     BranchPredictor *p0 = new NbitPredictor(13, 2); // 16K Overhead
     BranchPredictor *p1 = new NbitPredictor(12, 4); // 16K Overhead
-    bp = new TournamentPredictor( 1024, p0, p1);
+    bp = new TournamentPredictor(1024, p0, p1);
     branch_predictors.push_back(bp);
 
     p0 = new GlobalHistoryPredictor(2, 10,4);
@@ -300,6 +300,11 @@ VOID InitPredictors()
     p0 = new NbitPredictor(13, 2); // 16K Overhead
     p1 = new GlobalHistoryPredictor(5, 8, 2); // 8K BHT, 4*2K=8K PHT
     bp = new TournamentPredictor(1024, p0, p1);
+    branch_predictors.push_back(bp);
+
+    p0 = new NbitPredictor(13, 2); // 16K Overhead
+    p1 = new GlobalHistoryPredictor(5, 8, 2); // 8K BHT, 4*2K=8K PHT
+    bp = new TournamentPredictor(2048, p0, p1);
     branch_predictors.push_back(bp);
 
     p0 = new NbitPredictor(11, 8); // 16K Overhead

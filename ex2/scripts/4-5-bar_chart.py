@@ -12,8 +12,8 @@ outputDir = "../report/graphs/4-5/"
 predictors_to_plot = [ "  Static", "  BTFNT", "  Pentium", "  Nbit", "  Local", "  Global", "  Tournament", "  ALPHA"]
 
 
-def plot(outputDir, benchname, axes):
-    fig, ax = plt.subplots(figsize=(9, 5))
+def plot(outputDir, benchname, axes, sortit=True):
+    fig, ax = plt.subplots(figsize=(9, 7))
     ax.grid(axis='x')
     ax.set_axisbelow(True)
 
@@ -26,7 +26,7 @@ def plot(outputDir, benchname, axes):
 
     percentage = [str(x) for x in np.arange(0, 160, 10)]
     bar_thickness = 0.6
-    combos_count = len(axes.keys())
+    combos_count = len(axes)
     y_pos = (combos_count+ 1) * bar_thickness * np.arange(len(benches))
     matplotlib.axes.Axes.tick_params(ax, colors='dimgray')
 
@@ -34,20 +34,17 @@ def plot(outputDir, benchname, axes):
     handles = []
     labels = []
     maxval = -1;
-    for (combo, vals) in axes.items():
-        p = ax.barh(y_pos + bar_thickness*counter, np.array(vals), height=0.7*bar_thickness, align='center')
-        labels.append(combo + ' [' + "{:.2f}".format(vals[0])+ ']')
+
+    if sortit:
+        axes = sorted(axes, key=lambda tup: tup[1], reverse=True)
+
+    for (combo, val) in axes:
+        p = ax.barh(y_pos + bar_thickness*counter, np.array(val), height=0.7*bar_thickness, align='center')
+        labels.append('[ MPKI: ' + "{:.3f}".format(val)+ ' ]' + combo)
         handles.append(p)
-
-        i = 0
-        for bar_val in vals:
-            maxval = max(maxval, bar_val)
-            plt.text(x = bar_val + 1 , y = -0.05 + (counter + i*(combos_count+1)) *bar_thickness ,
-                s = "{:.3f}".format(bar_val),
-                size = 10)
-            i += 1
-
-        counter += 1
+        maxval = max(maxval, val)
+        plt.text(x = val + 1 , y = -0.05 + counter *bar_thickness , s = "{:.3f}".format(val), size = 10)
+        counter += 1;
 
     ax.set_yticks(y_pos + 0.5*combos_count*bar_thickness)
     ax.set_yticklabels([])
@@ -58,7 +55,7 @@ def plot(outputDir, benchname, axes):
     x_pos = np.arange(len(percentage))
     ax.set_xticks(10*x_pos)
     ax.set_xticklabels(percentage)
-    ax.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.05),
+    ax.legend(handles[::-1], labels[::-1], loc='upper center', bbox_to_anchor=(0.5, -0.09),
           fancybox=True, shadow=True, ncol=1)
     plt.xlabel('MPKI')
     plt.ylabel('Predictor')
@@ -72,13 +69,13 @@ def plot(outputDir, benchname, axes):
 axes = dict()
 for outFile in sys.argv[1:]:
     fp = open(outFile)
+    curaxes = []
 
     benchfile = outFile.split('/')[-1]
     nametokens = benchfile.split('.')
     benchname = nametokens[0] + '.' + nametokens[1]
     benchname = benchname.replace(".", '-')
     print(benchname)
-    curaxes = dict()
     benches = []
     print(benchname)
 
@@ -99,15 +96,22 @@ for outFile in sys.argv[1:]:
                 correct = float(tokens[0])
                 incorrect = float(tokens[1])
                 missprediction_rate = incorrect / total_instructions * 1000
-                curaxes.setdefault(combo, []).append(missprediction_rate)
+                curaxes.append((combo, missprediction_rate))
                 axes.setdefault(combo, []).append(missprediction_rate)
-
+ 
         line = fp.readline()
+
     plot(outputDir, benchname, curaxes)
     fp.close()
 
+axes_tuple = []
 for label, vals in axes.items():
-    axes[label] = [mstats.gmean(vals)]
-plot(outputDir, 'mean', axes)
+    axes_tuple.append((label, mstats.gmean(vals)))
+plot(outputDir, 'mean', axes_tuple) 
+
+tups = sorted(axes_tuple, key=lambda tup: tup[1], reverse=False)
+for (t, p) in tups:
+    print(t)
+
 
 

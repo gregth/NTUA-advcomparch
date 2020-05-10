@@ -6,23 +6,48 @@
 μετροπρογραμμάτων. Οι Predictors που συγκρίνονται είναι οι παρακάτω:
 
 \begin{flushleft}
-\begin{enumerate}
-   \item Static Taken Predictor
-   \item BTFNTPredictor
-   \item Pentium-M
+\begin{enumerate}[font=\small]
+   \item Static Always Taken Predictor
+   \item Static BTFNTPredictor (BackwardTaken-ForwardNotTaken)
    \item Nbit-8K-4bit 
-   \item LocalHistory-PHT(8K,2bit)-BHT(2K,8bit)
-   \item LocalHistory-PHT(8K,2bit)-BHT(4K,4bit)
-   \item GlobalHistory-PHT(16K,2bit)-BHR(5bit)
-   \item GlobalHistory-PHT(8K,4bit)-BHR(5bit)
-   \item GlobalHistory-PHT(8K,4bit)-BHR(10bit)
-   \item GlobalHistory-PHT(16K,2bit)-BHR(10bit)
-   \item Tournament(Nbit-8K-2bit, Nbit-4K-4bit)
-   \item Tournament(GlobalHistory-PHT(4K,4bit)-BHR(2bit), Nbit-8K-2bit)
-   \item Tournament(GlobalHistory-PHT(8K,2bit)-BHR(2bit), LocalHistory-PHT(2K,4bit)-BHT(4K,2bit))
-   \item Tournament(Nbit-8K-2bit, GlobalHistory-PHT(8K,2bit)-BHR(5bit))
-   \item Tournament(Nbit-2K-8bit, LocalHistory-PHT(2K,4bit)-BHT(4K,2bit))
-   \item ALPHA-PREDICTOR
+   \item Pentium-M
+   \item LocalHistory-PHT(8K, 2bit)-BHT(2K, 8bit)
+   \item LocalHistory-PHT(8K, 2bit)-BHT(4K, 4bit)
+   \item GlobalHistory-PHT(16K, 2bit)-BHR(5bit)
+   \item GlobalHistory-PHT(8K, 4bit)-BHR(5bit)
+   \item GlobalHistory-PHT(8K, 4bit)-BHR(10bit)
+   \item GlobalHistory-PHT(16K, 2bit)-BHR(10bit)
+   \item Tournament-1K-Entries
+      \begin{itemize}
+         \item $P_0$: Nbit-8K-2bit
+         \item $P_1$: Nbit-4K-4bit
+      \end{itemize}
+   \item Tournament-2K-Entries
+      \begin{itemize}
+         \item $P_0$: GlobalHistory-PHT(4K, 4bit)-BHR(2bit)
+         \item $P_1$: Nbit-8K-2bit
+      \end{itemize}
+   \item Tournament-1K-Entries
+      \begin{itemize}
+         \item $P_0$: GlobalHistory-PHT(8K, 2bit)-BHR(2bit)
+         \item $P_1$: LocalHistory-PHT(2K, 4bit)-BHT(4K, 2bit)
+      \end{itemize}
+   \item Tournament-1K-Entries
+      \begin{itemize}
+         \item $P_0$: Nbit-8K-2bit
+         \item $P_1$: GlobalHistory-PHT(8K, 2bit)-BHR(5bit)
+      \end{itemize}
+   \item Tournament-2K-Entries
+      \begin{itemize}
+         \item $P_0$: Nbit-8K-2bit
+         \item $P_1$: GlobalHistory-PHT(8K, 2bit)-BHR(5bit)
+      \end{itemize}
+   \item Tournament-1K-Entries
+      \begin{itemize}
+         \item $P_0$: Nbit-2K-8
+         \item $P_1$: LocalHistory-PHT(2K, 4bit)-BHT(4K, 2bit)
+      \end{itemize}
+   \item Alpha Predictor
 \end{enumerate}
 \end{flushleft}
 
@@ -54,7 +79,7 @@
          \fbox{\textlatin{\textbf{\textit{434-zeusmp}}}}\\
          \vspace{3mm}
          \includegraphics[width=0.9\textwidth, frame]{./graphs/4-5/434-zeusmp.png}
-         \vspace{6mm}4
+         \vspace{6mm}
       \end{center}
    \end{minipage}
 
@@ -148,23 +173,49 @@
          \vspace{6mm}
       \end{center}
    \end{minipage}
-
+\newpage
 \paragraph{Συμπεράσματα-Σχόλια}
-   
+   Όπως είναι αναμενόμενο, ο Static Always Taken Predictor έχει τη χειρότερη
+   επίδοση σε όλα τα μετροπρογράμματα. Επόμενος χειρότερος predictor είναι ο
+   BTFNT, εξίσου αναμενόμενο αφού πρόκειται για static predictor, με ελαφρά
+   ωστόσο καλύτερη επίδοση από τον Always Taken. Ακολουθεί ο Pentium Predictor. 
+  
+   Όσον αφορά την επιλογή ενός συγκεκριμένουν predictor, θα πρέπει να λάβουμε
+   υπ' όψιν την χρήση που θα κάνει το σύστημα. Αν το προφίλ της χρήσης κάνει
+   align με ένα ή περισσότερα benchmarks τότε θα διαλέξουμε τον predictor που τα
+   πηγαίνει καλύτερα σε αυτήν την χρήση. Επειδή στη μελέτη αυτή όμως δε δίνεται
+   έμφαση σε ένα συγκεκριμένο benchmark, θα κρίνουμε με βάση τη συνολική επίδοση
+   των 12 προγηούμενων benchmarks κατά μέσο όρο. Για τη συνολική αυτή εποπτεία,
+   παραθέτουμε το τελευταίο διάγραμμα, των γεωμετρικών μέσων όρων. Με βάση το
+   διάγραμμα αυτό, και επιβεβαιώνοντας από τα επιμέρους διαγράμματα των
+   benchmarks, συμπεραίνουμε πως ο \textbf{Alpha Predictor} έχει κατά μέσο όρο
+   την καλύτερη επίδοση (χαμηλό MPKI) συνολικά, αλλά και την καλύτερη επίδοση σε
+   κάθε ένα από τα benchmarks. Εξίσου καλά ωστόσο αποδίδουν και οι
+   GlobalHistory-PHT(16K, 2bit)-BHR(10bit) LocalHistory-PHT(8K, 2bit)-BHT(2K,
+   8bit).
 
-   Για αριθμό εγγραφών στη RAS ίσο με 1, παρατηρούμε σε σχεδόν όλα τα benchmarks
-   πολύ υψηλό MPKI. Μόλις το RAS κάνει χρήση 2 εγγραφών, είναι εμφανής η
-   σημαντική μείωση του MPKI. Για μεταβολή από 2 σε 4 εγγραφές, παρατηρούμε και
-   πάλι σχεδόν σε όλα τα μετροπρογράμματα μείωση του MPKI, όπως είναι επιθυμητό.
-   Για παραπάνω entries, τα MPKI μειώνονται μεν αλλά πλέον σχετικά λίγο, είτε
-   παραμένουν σταθερά. Σε κάθε περίπτωση με την αύξηση των εγγραφών οδηγούμαστε
-   σε βελτίωση της επίδοσης, ωστόσο από ένα σημείο και πέρα η περεταίρω αύξηση
-   δεν έχει νόημα καθώς η επίδοση δεν βελτιώνονται δραστικά αναλογικά με την
-   αύξηση του υλικού που πραγματοποιούμε. 
-
-   Με βάση τα παραπάνω, οι επιλογή 16 ή 32 ή 64 εγγραφών είναι αρκετά καλή
-   επιλογή. Αν λαμβάναμε υπ’ όψιν και το κόστος του σχετικού υλικού, τότε
-   ενδεχομένως να έπρεπε να περιοριστούμε στο ελάχιστο υλικό και άρα να
-   επιλέξουμε 16 εγγραφές RAS.
-   
-   \textbf{Συνοπτικά, καλύτερη επιλογή είναι 16 εγγραφές στην RAS}.
+   \vspace{1em}
+   \noindent Συνολικά, με βάση τις γεωμετρικές μέσες τιμές, οι predictors σε σειρά
+   φθίνουσας επίδοσης είναι: {\small 
+   \begin{enumerate}
+      \item Alpha Predictor
+      \item GlobalHistory-PHT(16K, 2bit)-BHR(10bit)
+      \item LocalHistory-PHT(8K, 2bit)-BHT(2K, 8)
+      \item Tournament-2K-Entries-(Nbit-8K-2, GlobalHistory-PHT(8K, 2bit)-BHR(5bit))
+      \item Tournament-1K-Entries-(Nbit-8K-2, GlobalHistory-PHT(8K, 2bit)-BHR(5bit))
+      \item GlobalHistory-PHT(8K, 4bit)-BHR(10bit)
+      \item GlobalHistory-PHT(16K, 2bit)-BHR(5bit)
+      \item LocalHistory-PHT(8K, 2bit)-BHT(4K, 4bit)
+      \item Tournament-1K-Entries-(GlobalHistory-PHT(8K, 2bit)-BHR(2bit), LocalHistory-PHT(2K, 4bit)-BHT(4K, 2bit))
+      \item GlobalHistory-PHT(8K, 4bit)-BHR(5bit)
+      \item Tournament-1K-Entries-(Nbit-2K-8, LocalHistory-PHT(2K, 4bit)-BHT(4K, 2bit))
+      \item Tournament-2K-Entries-(GlobalHistory-PHT(4K, 4bit)-BHR(2bit), Nbit-8K-2bit)
+      \item Tournament-1K-Entries-(Nbit-8K-2, Nbit-4K-4bit)
+      \item Nbit-8K-4bit
+      \item Pentium-M
+      \item BTFNTPredictor
+      \item StaticTakenPredictor
+   \end{enumerate}
+   }
+   \vspace{1em}
+   \noindent \textbf{Άρα, θα επέλεγα για συνολικά καλύτερη επίδοση, τoν Alpha Predictor.}
