@@ -1,0 +1,44 @@
+Enabled messages [UnixVersion()] 55  info: Informational messages (enabled by default)
+Pinball basename: /home/gregth/workspace/advcomparch/ex3/cpu2006_pinballs/astar/pinball_short.pp/pinball_t0r1_warmup3000_prolog0_region1000000005_epilog0_001_1-00000.0
+Replaying on 'Linux', recorded on 'Linux'
+Focus thread: 0
+Found VDSO in page 0x7ffccd432000
+NOP sequence address allocated in empty range 0x000424000 
+Preloaded images: 0
+Setting image replay mode in Pin.
+[0] Started Replaying thread OSPid: 836 OSTid: 836 PIN tid 0
+[0] Restoring initial pages
+[0] Thread replayer initialized
+[0] Mapping stack address, pin tid 0
+[0] All threads were created, ready to replay 
+[0] Restoring Initial checkpoint before PC:0x0004091e0 ctxt: 0x7f8c382eb280
+[0] Replayer ThreadStart Initial IP: 0x0004091e0
+[0] ***Unexpected (not replayed) exception***
+Thread 0 dying after unexpected exception @icount: 3932277
+[0] From registers
+RFLAGS      0x000010246 (PZ)
+RAX         0xffffffffffffffd8
+RBX         0x000001258
+RCX         0x00000005b
+RDX         0x000000000
+RBP         0x005dcff80
+RSP         0x7fff8368ad20
+RDI         0x000001258
+RSI         0x006dc8550
+R8          0x000000400
+R9          0x00001778f
+R10         0x000000004
+R11         0x000000005
+R12         0x7fff8368adb0
+R13         0x7fff8368bf6c
+R14         0x7fff8368bf50
+R15         0x0006b7260
+SEG_FS_BASE 0x001793870
+SEG_GS_BASE 0x000000000
+RIP         0x000434ca7
+[0] ContextChangeCallback(0, 0, 0x7f8c37a1aab8, 0x000000000, 11) at PC: 0x000434ca7
+[0] Thread received fatal signal 11 @ icount 3932277
+[0] Dumped 0 events from the trace
+[0] No other threads exist
+ERROR: Thread 0 dying after unexpected exception @icount: 3932277 PC 0x000434ca7
+Exiting...
