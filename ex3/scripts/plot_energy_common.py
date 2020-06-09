@@ -19,6 +19,7 @@ def get_energy_delay_from_output_file(output_file):
     EDP_1 = 0
     EDP_2 = 0
     EDP_3 = 0
+    energy = 0
     fp = open(output_file, "r")
     line = fp.readline()
     while line:
@@ -38,7 +39,7 @@ def get_energy_delay_from_output_file(output_file):
         line = fp.readline()
 
     fp.close()
-    return (EDP_1, EDP_2, EDP_3)
+    return (energy, EDP_1, EDP_2, EDP_3)
 
 def tuples_by_dispatch_width(tuples):
     ret = []
@@ -54,7 +55,7 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 
-results_tuples = [[] for i in range(3)]
+results_tuples = [[] for i in range(4)]
 
 for dirname in sys.argv[1:]:
     if dirname.endswith("/"):
@@ -64,25 +65,28 @@ for dirname in sys.argv[1:]:
 
     (bench, input_size, dispatch_width, window_size) = get_params_from_basename(basename)
     if (window_size < 16): continue
-    (EDP_1, EDP_2, EDP_3) = get_energy_delay_from_output_file(output_file)
-    results_tuples[0].append((dispatch_width, window_size, EDP_1))
-    results_tuples[1].append((dispatch_width, window_size, EDP_2))
-    results_tuples[2].append((dispatch_width, window_size, EDP_3))
+    (energy, EDP_1, EDP_2, EDP_3) = get_energy_delay_from_output_file(output_file)
+    results_tuples[0].append((dispatch_width, window_size, energy))
+    results_tuples[1].append((dispatch_width, window_size, EDP_1))
+    results_tuples[2].append((dispatch_width, window_size, EDP_2))
+    results_tuples[3].append((dispatch_width, window_size, EDP_3))
 
 
 markers = ['.', 'o', 'v', '*', 'D']
 
-fig, axes = plt.subplots(3, figsize=(10,19))
+fig, axes = plt.subplots(4, figsize=(10,19))
 #plt.subplots_adjust(hspace=0.3)
 plt.grid(True)
-for i in range(3):
+for i in range(4):
     ax = axes[i]
     ax.grid(b=True)
 
     if (i == 0):
-        ylabel = '$EDP$'
+        ylabel = '$Energy\ (J)$'
+    elif (i == 1):
+        ylabel = '$EDP\ (J*sec)$'
     else:
-        ylabel = '$ED^' + str(i+1) + 'P$'
+        ylabel = '$ED^' + str(i) + 'P\ (J*sec^' + str(i) + ')$'
     ax.set_ylabel(ylabel, fontsize=18)
 
     j = 0
@@ -91,8 +95,9 @@ for i in range(3):
     x_ticks = np.arange(0, len(global_ws))
     x_labels = map(str, global_ws)
     ax.xaxis.set_ticks(x_ticks)
-    ax.xaxis.set_ticklabels(x_labels, fontsize=12)
+    ax.xaxis.set_ticklabels(x_labels, fontsize=14)
 
+    ax.tick_params(axis='both', which='major', labelsize=14)
     for tuple in tuples_by_dw:
         dw = tuple[0]
         ws_axis = tuple[1][0]
