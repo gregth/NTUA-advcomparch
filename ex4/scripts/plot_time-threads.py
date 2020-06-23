@@ -20,8 +20,8 @@ def get_time_from_output_file(output_file):
 	fp = open(output_file, "r")
 	line = fp.readline()
 	while line:
-		if line.strip().startswith("Time"):
-			time = float(line.split()[3])/10**6
+		if line.strip().startswith("Cycles"):
+			time = float(line.split()[2])
 		line = fp.readline()
 
 	fp.close()
@@ -66,14 +66,14 @@ for dirname in sys.argv[1:]:
 	(lock_type, n_threads, grain, name) = get_params_from_basename(basename)
 	time = get_time_from_output_file(output_file)
 	(en, edp) = get_energy_from_output_file(output_file2)
-	results_tuples.setdefault((lock_type), []).append((name, time, en, edp))
+	results_tuples.setdefault((name), []).append((lock_type, time, en, edp))
 
-fig, ax = plt.subplots(figsize=(13, 10))
-ax.set_xlabel(r"$Thread\ Topology $", fontsize=14)
-ax.set_ylabel(r"$Time\ (ms)$", fontsize=14)
+fig, ax = plt.subplots(figsize=(15, 10))
+ax.set_xlabel(r"$Synchronization\ Mechanism$", fontsize=14)
+ax.set_ylabel(r"$Cycles$", fontsize=14)
 
 i = 0
-width = 0.15
+width = 0.20
 colors = ['b', 'g', 'r', 'yellow', 'skyblue']
 
 for (lock_type, values_tuples) in results_tuples.items():
@@ -88,7 +88,7 @@ for (lock_type, values_tuples) in results_tuples.items():
 
 axes = plt.gca()
 axes.yaxis.grid(zorder=1)
-plt.xticks(x + 2*width, topologies) 
+plt.xticks(x + 1.5*width, topologies) 
 plt.legend()
 # Shrink current axis by 20%
 box = ax.get_position()
@@ -102,8 +102,8 @@ print "Saving: " 	+ output
 plt.savefig(output, bbox_inches='tight')
 
 
-fig, ax = plt.subplots(figsize=(13, 10))
-ax.set_xlabel(r"$Thread\ Topology $", fontsize=14)
+fig, ax = plt.subplots(figsize=(15, 10))
+ax.set_xlabel(r"$Synchronization\ Mechanism$", fontsize=14)
 ax.set_ylabel(r"$Energy\ (J)$", fontsize=14)
 i = 0
 for (lock_type, values_tuples) in results_tuples.items():
@@ -118,7 +118,7 @@ for (lock_type, values_tuples) in results_tuples.items():
 
 axes = plt.gca()
 axes.yaxis.grid(zorder=1)
-plt.xticks(x + 2*width, topologies) 
+plt.xticks(x + 1.5*width, topologies) 
 plt.legend()
 # Shrink current axis by 20%
 box = ax.get_position()
@@ -128,8 +128,8 @@ output = output_base + 'topology-energy-analysis.png'
 print "Saving: " 	+ output
 plt.savefig(output, bbox_inches='tight')
 
-fig, ax = plt.subplots(figsize=(13, 10))
-ax.set_xlabel(r"$Thread\ Topology $", fontsize=14)
+fig, ax = plt.subplots(figsize=(15, 10))
+ax.set_xlabel(r"$Synchronization\ Mechanism$", fontsize=14)
 ax.set_ylabel(r"$EDP\ (J*s)$", fontsize=14)
 i = 0
 for (lock_type, values_tuples) in results_tuples.items():
@@ -144,7 +144,7 @@ for (lock_type, values_tuples) in results_tuples.items():
 
 axes = plt.gca()
 axes.yaxis.grid(zorder=1)
-plt.xticks(x + 2*width, topologies) 
+plt.xticks(x + 1.5*width, topologies) 
 plt.legend()
 # Shrink current axis by 20%
 box = ax.get_position()

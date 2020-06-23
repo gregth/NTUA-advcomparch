@@ -1,0 +1,42 @@
+\section{Μέρος Β': Εκτέλεση Αλγορίθμου Tomasulo}
+Ακολουθεί ο πίνακας με την εκτέλεση του αλγορίθμου Tomasulo. Η στήλη No είναι ο αύξων 
+αριθμός κάθε γραμμής του πίνακα, ενώ η στήλη CMD δίνει τον αριθμό (γραμμή - ξεκινώντας από το 0) της
+εντολής στο αρχικό κομμάτι κώδικα που μας δίνεται.
+Οι σειρές που χρωματίζονται με κίτρινο χρώμα αντιστοιχούν σε εντολές οι 
+οποίες γίνονται flush.
+
+\begin{table}
+  \centering
+  \begin{tabular}{|l|p{0.8cm}|l|l|l|l|l|p{6.2cm}|}
+    \Xhline{3\arrayrulewidth} \Xhline{3\arrayrulewidth}
+      No & CMD& OP & IS & EX & WR & CMT & Σχόλιο \\ \Xhline{3\arrayrulewidth}
+      \midrule
+      0 & 0 & LD F0, 0(R1) & 1 & 2-5 & 6 & 7 & Miss on A[0]  - fetch(A[0], A[1]) \\ \Xhline{3\arrayrulewidth}
+      1 & 1 & ADDD F4, F4, F0 & 1 & 7-9 & 10 & 11 & RAW(F0) \\ \Xhline{3\arrayrulewidth}
+      2 & 2 & LD F1, 0(R2) & 2 & 3-6 & 7 & 11 & Miss on B[0] - fetch(B[0], B[1]) - New Cache content: A[0],A[1].B[0],B[1] \\ \Xhline{3\arrayrulewidth}
+      3 & 3 & MULD F4, F4, F1 & 2 & 11-15 & 16 & 17 & RAW(F1, F4) \\ \Xhline{3\arrayrulewidth}
+      4 & 4 & ANDI R9, R8, 0x2 & 3 & 4-5 & 8 & 17 & R9=0 -  CDB Conflict για 6ο και 7ο κύκλο, άρα WR στον 8ο κύκλο \\ \Xhline{3\arrayrulewidth}
+      5 & 5 & BNEZ R9, NEXT & 3 & 9-10 & 11 & 18 &  RAW(R9) - ΒΗR=0 - ADDR: 0x0044843C,  FSM=11, predicts T, res=NT \\ \Xhline{3\arrayrulewidth}
+      \rowcolor{yellow}
+      6 & 9 & LD F5, 8(R1) & 7 & 8 & 9 & - & Hit A[1], Load Queue Full till cycle 6 \\ \Xhline{3\arrayrulewidth}
+      \rowcolor{yellow}
+      7 & 10 & ADDD F4, F4, F5 & 7 & - & - & - & RAW(F4), το F4 έτοιμο στον κύκλο 16, όμως ήδη στον 11ο θα έχει γίνει fush \\ \Xhline{3\arrayrulewidth}
+      \rowcolor{yellow}
+      8 & 11 & ADDI R1, R1, 0x8 & 8 & 9-10 & - & - & flush @cycle 11 \\ \Xhline{3\arrayrulewidth}
+      \rowcolor{yellow}
+      9 & 12 & SUBI R8, R8, 0x1 & 9 & 10-11 & - & -1 & Reservation Stations full till cycle 8 - Η επόμενη εντολή BNEZ δε θα βρει RS πριν τον κυκλο 12 αρα δεν γίνεται ποτέ issue -  flush @cycle 11 \\ \Xhline{3\arrayrulewidth}
+      10 & 6 & LD F2, 16(R2) & 12 & 13-16 & 17 & 18 & Cache Miss, fetch(B[2],B[3]), New Cache Content A[0], A[1], B[2], B[3] \\ \Xhline{3\arrayrulewidth}
+      11 & 7 & MULD F2, F2, F5 & 12 & 18-22 & 23 & 24 & RAW(F2) \\ \Xhline{3\arrayrulewidth}
+      12 & 8 & ADDD F4, F4, F2 & 13 & 24-26 & 27 & 28 & RAW(F2) \\ \Xhline{3\arrayrulewidth}
+      13 & 9 & LD F2, 16(R2) & 13 & 14 & 15 & 28 & Cache Hit B[2] \\ \Xhline{3\arrayrulewidth}
+      14 & 10 & ADDD F4, F4, F5 & 14 & 28-30 & 31 & 32 & RAW(F4) \\ \Xhline{3\arrayrulewidth}
+      15 & 11 & ADDI R1, R1, 0x8 & 14 & 15-16 & 18 & 32 & CDB \\ \Xhline{3\arrayrulewidth}
+      16 & 12 & SUBI R8, R8, 0x1 & 18 & 19-20 & 21 & 33 & RoB full till 17 cycle \\ \Xhline{3\arrayrulewidth}
+      17 & 13 & BNEZ R8, LOOP & 18 & 22-23 & 24 & 33 & FSM=0; predicts T, res=NT, RAW(R8), θα γίνει flush στον 24ο κύκλο \\ \Xhline{3\arrayrulewidth}
+      \rowcolor{yellow}
+      18 & 0 & LD F0, 0(R1) & 19 & 20 & 22 & - & Cache Hit A[1], CDB \\ \Xhline{3\arrayrulewidth}
+      \rowcolor{yellow}
+      19 & 1 & ADDD F4, F4, F0 & 19 & - & - & - & RAW(F4), θα είναι γνωστό στον 31κύκλο. Με την εντολή αυτή γεμίζει ο RoB - Διαθέσιμη θέση θα υπάρξει ξανά μόλις απελευθερωθεί θέση στο ΡΟΒ, στον 25ο κυκλο! Τότε θα έχει γίνει ήδη flush \\ \Xhline{3\arrayrulewidth}
+      20 & 14 & SD F4, 8(R2) & 25 & 32-35 & 36 & 37 & RAW(F4), Cache Miss \\ \Xhline{3\arrayrulewidth}
+  \end{tabular}
+\end{table}

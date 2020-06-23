@@ -7,7 +7,7 @@ SNIPER_EXE=/home/gregth/workspace/advcomparch/ex3/sniper-7.3/run-sniper
 SNIPER_CONFIG=/home/gregth/workspace/advcomparch/ex4/code/ask4.cfg
 BINARY_CODE=/home/gregth/workspace/advcomparch/ex4/code
 
-OUTPUT_DIR_BASE="/home/gregth/workspace/advcomparch/ex4/outputs/sniper"
+OUTPUT_DIR_BASE="/home/gregth/workspace/advcomparch/ex4/outputs/3-1-1-sniper"
 architectures="1_1_1 2_2_2 4_4_4 8_4_8 16_1_8"
 
 LOCKTYPES="dtas_cas dtas_ts dttas_cas dttas_ts mutex"

@@ -7,7 +7,8 @@ SNIPER_EXE=/home/gregth/workspace/advcomparch/ex3/sniper-7.3/run-sniper
 SNIPER_CONFIG=/home/gregth/workspace/advcomparch/ex4/code/ask4.cfg
 BINARY_CODE=/home/gregth/workspace/advcomparch/ex4/code
 
-OUTPUT_DIR_BASE="/home/gregth/workspace/advcomparch/ex4/outputs/sniper-shared"
+OUTPUT_DIR_BASE="/home/gregth/workspace/advcomparch/ex4/outputs/3-2-shared-new"
+makedir $OUTPUT_DIR_BASE
 architectures="4_4_share-all 1_4_share-L3 1_1_share-nothing"
 
 LOCKTYPES="dtas_cas dtas_ts dttas_cas dttas_ts mutex"

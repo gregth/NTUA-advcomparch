@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OUTPUT_DIR_BASE="/home/gregth/workspace/advcomparch/ex4/outputs/sniper-shared"
+OUTPUT_DIR_BASE="/home/gregth/workspace/advcomparch/ex4/outputs/3-2-shared-new"
 SNIPER_DIR="/home/gregth/workspace/advcomparch/ex3/sniper-7.3"
 
 echo "Outputs to be processed located in: $OUTPUT_DIR_BASE"

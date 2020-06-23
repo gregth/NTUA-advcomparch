@@ -55,8 +55,6 @@ for (grain_size, res_tuples) in results_tuples.items():
 	markers = ['.', 'o', 'v', '*', 'D']
 	fig, ax = plt.subplots()
 	plt.grid(True)
-	ax.set_xlabel(r"$Number\ of\ Threads$", fontsize=14)
-	ax.set_ylabel(r"$Time\ (ms)$", fontsize=14)
 
 	i = 0
 	print res_tuples
@@ -81,7 +79,7 @@ for (grain_size, res_tuples) in results_tuples.items():
 	box = ax.get_position()
 	#ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 	# Put a legend to the right of the current axis
-	lgd = ax.legend(ncol=1, loc='upper left', bbox_to_anchor=(0, 0.9), prop={'size':10})
+	lgd = ax.legend(ncol=1, loc='upper left', bbox_to_anchor=(0, 1), prop={'size':10})
 	plt.title('Grain Size: ' + str(grain_size))
 	output_base = '../report/graphs/sniper/time/'
 	output = output_base + 'grain-' + str(grain_size) + '.png'

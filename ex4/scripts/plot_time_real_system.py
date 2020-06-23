@@ -33,8 +33,6 @@ def get_tuples_by_lock_type(tuples):
 		ret.append((key, zip(*map(lambda x: x[1:], list(group)))))
 	return ret
 
-global_ws = [1,2,4,8,16,32,64,96,128,192,256,384]
-
 if len(sys.argv) < 2:
 	print "usage:", sys.argv[0], "<output_directories>"
 	sys.exit(1)
@@ -59,23 +57,22 @@ for (grain_size, res_tuples) in results_tuples.items():
 	ax.set_ylabel(r"$Time\ (sec)$", fontsize=14)
 
 	i = 0
-	print res_tuples
 	tuples_by_lock_type = get_tuples_by_lock_type(res_tuples)
 
-	x_ticks = np.arange(0, len(global_ws))
-	x_labels = map(str, global_ws)
-	ax.xaxis.set_ticks(x_ticks)
-	ax.xaxis.set_ticklabels(x_labels)
 
 	for tuple in tuples_by_lock_type:
-		print tuple
 		lock_type = tuple[0]
 		nthread_axis = tuple[1][0]
 		time_axis = tuple[1][1]
-		x_ticks = np.arange(0, len(time_axis))
+		x_ticks = 2**np.arange(0, len(time_axis))
 
+		print time_axis
 		ax.plot(x_ticks, time_axis, linewidth=1, label=str(lock_type), marker=markers[i%len(markers)])
 		i = i + 1
+		
+	x_labels = map(str, x_ticks) 
+	ax.xaxis.set_ticks(x_ticks)
+	ax.xaxis.set_ticklabels(x_labels)
 
 	# Shrink current axis by 20%
 	box = ax.get_position()

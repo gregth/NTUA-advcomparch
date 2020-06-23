@@ -98,7 +98,7 @@ for grain_size in energy_tuples.keys():
 		nthread_axis = tuple[1][0]
 		lock_type = tuple[0]
 		energy_axis = tuple[1][1]
-		x_ticks = np.arange(0, len(energy_axis))
+		x_ticks = 2**np.arange(0, len(energy_axis))
 		ax[0].plot(x_ticks, energy_axis, linewidth=1, label=str(lock_type), marker=markers[i%len(markers)])
 		i = i + 1
 
@@ -106,15 +106,17 @@ for grain_size in energy_tuples.keys():
 	for tuple in edp_tuples_by_lock_type:
 		lock_type = tuple[0]
 		energy_axis = tuple[1][1]
+		x_ticks = 2**np.arange(0, len(energy_axis))
 		ax[1].plot(x_ticks, energy_axis, linewidth=1, label=str(lock_type), marker=markers[i%len(markers)])
 		i = i + 1
 
 	ax[0].grid(b=True)
 	ax[1].grid(b=True)
 	x_labels = map(str, nthread_axis)
-	x_ticks = np.arange(0, len(energy_axis))
+	x_ticks = 2**np.arange(0, len(energy_axis))
 	plt.setp(ax, xticks=x_ticks, xticklabels=x_labels)
 	lgd = ax[1].legend(ncol=len(energy_tuples_by_lock_type), bbox_to_anchor=(0.94, -0.08), prop={'size':12})
+	lgd = ax[0].legend(ncol=len(energy_tuples_by_lock_type), bbox_to_anchor=(0.94, -0.08), prop={'size':12})
 
 	output_base = '../report/graphs/sniper/energy/'
 	output = output_base + 'grain-' + str(grain_size) + '.png'
