@@ -164,8 +164,6 @@ VOID Fini(int code, VOID * v)
 
 VOID InitPredictors()
 {
-    /**** 4-2  *****/
-    /*
     // N-bit predictors
     for (int i=1; i <= 4; i++) {
         NbitPredictor *nbitPred = new NbitPredictor(14, i);
@@ -182,13 +180,11 @@ VOID InitPredictors()
 
 
     // Pentium-M predictor
-    //PentiumMBranchPredictor *pentiumPredictor = new PentiumMBranchPredictor();
-    //branch_predictors.push_back(pentiumPredictor);
+    PentiumMBranchPredictor *pentiumPredictor = new PentiumMBranchPredictor();
+    branch_predictors.push_back(pentiumPredictor);
 
-    */
 
     /**** 4-3: BTB  *********/
-    /*
     BTBPredictor *btb = new BTBPredictor(512, 1);
     btb_predictors.push_back(btb);
 
@@ -206,25 +202,6 @@ VOID InitPredictors()
 
     btb = new BTBPredictor(8, 8);
     btb_predictors.push_back(btb);
-
-    BTBPredictorApost *btbap = new BTBPredictorApost(512, 1);
-    btb_predictors.push_back(btbap);
-
-    btbap = new BTBPredictorApost(256, 2);
-    btb_predictors.push_back(btbap);
-
-    btbap = new BTBPredictorApost(128, 2);
-    btb_predictors.push_back(btbap);
-
-    btbap = new BTBPredictorApost(64, 4);
-    btb_predictors.push_back(btbap);
-
-    btbap = new BTBPredictorApost(32, 4);
-    btb_predictors.push_back(btbap);
-
-    btbap = new BTBPredictorApost(8, 8);
-    btb_predictors.push_back(btbap);
-    */
 
     /********* 4.5 *************/
     BranchPredictor* bp = new StaticTakenPredictor();

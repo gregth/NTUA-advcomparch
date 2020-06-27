@@ -154,7 +154,6 @@ public:
 };
 
 
-// KALNTIS
 class BTBPredictor : public BranchPredictor 
 {
 private:
